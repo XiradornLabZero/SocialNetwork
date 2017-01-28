@@ -34,7 +34,7 @@ if (isset($_POST['login'])) {
 ?>
 
 <h1>Login to your account</h1>
-<form action="login" method="post">
+<form action="login.php" method="post">
 	<input type="text" name="username" value="" placeholder="Username">
 	<input type="password" name="password" value="" placeholder="Password">
 	<input type="submit" name="login" value="Login">

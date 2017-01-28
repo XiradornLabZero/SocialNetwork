@@ -80,7 +80,7 @@ if (Login::isLoggedIn()) {
 ?>
 
 <h1>Change Password</h1>
-<form action="<?php if (!$tokenIsValid) { echo "change-password"; } else { echo "change-password/?token={$token}"; } ?>" method="post">
+<form action="<?php if (!$tokenIsValid) { echo "change-password"; } else { echo "change-password.php?token={$token}"; } ?>" method="post">
 	<?php if (!$tokenIsValid) { echo '<input type="password" name="oldpassword" value="" placeholder="Current Password">'; } ?>
 	<input type="password" name="newpassword" value="" placeholder="New Password">
 	<input type="password" name="newpasswordrepeat" value="" placeholder="Repeat New Password">

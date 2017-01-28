@@ -54,7 +54,7 @@ if (isset($_POST['createaccount'])) {
 ?>
 
 <h1>Register Form</h1>
-<form class="" action="create-account" method="post">
+<form class="" action="create-account.php" method="post">
 	<input type="text" name="username" value="" placeholder="Username">
 	<input type="password" name="password" value="" placeholder="Password">
 	<input type="email" name="email" value="" placeholder="email@example.com">

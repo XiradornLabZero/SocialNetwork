@@ -1,15 +1,15 @@
-<IfModule mod_rewrite.c>
-Options +MultiViews
-RewriteEngine On
-
-RewriteCond %{REQUEST_FILENAME}.php !-d
-RewriteCond %{REQUEST_FILENAME}.php -f
-RewriteRule ^(.*)$ $1.php [NC,L]
-
-RewriteCond %{QUERY_STRING} (?:^|&)token=([a-fA-F0-9]+) [NC]
-RewriteRule ^change-password\.php$ change-password/ [NC,L,QSA]
-
-RewriteCond %{QUERY_STRING} (?:^|&)username=([a-zA-Z0-9]+) [NC]
-RewriteRule ^profile\.php$ profile/%1 [NC,L]
-
-</IfModule>
+#<IfModule mod_rewrite.c>
+#Options +MultiViews
+#RewriteEngine On
+#
+#RewriteCond %{REQUEST_FILENAME}.php !-d
+#RewriteCond %{REQUEST_FILENAME}.php -f
+#RewriteRule ^(.*)$ $1.php [NC,L]
+#
+#RewriteCond %{QUERY_STRING} (?:^|&)token=([a-fA-F0-9]+) [NC]
+#RewriteRule ^change-password\.php$ change-password/ [NC,L,QSA]
+#
+#RewriteCond %{QUERY_STRING} (?:^|&)username=([a-zA-Z0-9]+) [NC]
+#RewriteRule ^profile\.php$ profile/%1 [NC,L]
+#
+#</IfModule>
