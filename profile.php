@@ -1,4 +1,4 @@
-<?php 
+<?php
 include('classes/DB.php');
 include('classes/Login.php');
 
@@ -17,10 +17,10 @@ if (isset($_GET['username'])) {
 		$verified = DB::query('SELECT verified FROM users WHERE username = :username', array(':username' => $_GET['username']))[0]['verified'];
 		$follower_id = Login::isLoggedIn();
 
-			
+
 
 		if (isset($_POST['follow'])) {
-			
+
 			if ($user_id != $follower_id) {
 
 				if (!DB::query('SELECT follower_id FROM followers WHERE user_id = :user_id AND follower_id = :follower_id', array(':user_id' => $user_id, ':follower_id' => $follower_id))) {
@@ -36,7 +36,7 @@ if (isset($_GET['username'])) {
 				}
 
 				$isFollowing = true;
-			
+
 			} else {
 				echo "That's my Profile";
 			}
@@ -65,7 +65,7 @@ if (isset($_GET['username'])) {
 				}
 
 				$isFollowing = false;
-			
+
 			} else {
 				echo "That's my Profile";
 			}
@@ -96,11 +96,12 @@ if (isset($_GET['username'])) {
 
 		if (isset($_GET['postid'])) {
 
-			if(!DB::query('SELECT user_id FROM post_likes WHERE post_id = :post_id AND user_id = :user_id', array(':post_id' => $_GET['postid'], ':user_id' => $user_id))) {
-				DB::query('UPDATE posts SET likes = likes+1 WHERE id = :postid', array(':postid' => $_GET['postid']));
-				DB::query('INSERT INTO post_likes VALUES (\'\', :postid, :user_id)', array(':postid' => $_GET['postid'], ':user_id' => $user_id));
+			if(!DB::query('SELECT user_id FROM post_likes WHERE post_id = :post_id AND user_id = :user_id', array(':post_id' => $_GET['postid'], ':user_id' => $follower_id))) {
+				DB::query('UPDATE posts SET likes = likes+1 WHERE id = :post_id', array(':post_id' => $_GET['postid']));
+				DB::query('INSERT INTO post_likes VALUES (\'\', :post_id, :user_id)', array(':post_id' => $_GET['postid'], ':user_id' => $follower_id));
 			} else {
-				echo "Alredy liked!!!";
+				DB::query('UPDATE posts SET likes = likes-1 WHERE id = :post_id', array(':post_id' => $_GET['postid']));
+				DB::query('DELETE FROM post_likes WHERE post_id = :post_id AND user_id = :user_id', array(':post_id' => $_GET['postid'], ':user_id' => $follower_id));
 			}
 
 		}
@@ -108,13 +109,26 @@ if (isset($_GET['username'])) {
 		$dbpost = DB::query('SELECT * FROM posts WHERE author_id = :author_id ORDER BY id DESC', array(':author_id' => $user_id));
 
 		foreach ($dbpost as $p) {
-			$posts .= htmlspecialchars($p['post']);
-			$posts .= "<form action=\"profile.php?username={$username}&postid={$p['id']}\" method=\"post\">
-							<input type=\"submit\" name=\"like\" value=\"Like\">
-						</form>";
-			$posts .= "<hr>";
+
+			if (!DB::query('SELECT post_id FROM post_likes WHERE post_id = :post_id AND user_id = :user_id', array(':post_id' => $p['id'], ':user_id' => $follower_id))) {
+				$posts .= htmlspecialchars($p['post']);
+				$posts .= "<form action=\"profile.php?username={$username}&postid={$p['id']}\" method=\"post\">
+								<input type=\"submit\" name=\"like\" value=\"Like\">
+								<span>{$p['likes']} likes</span>
+							</form>";
+				$posts .= "<hr>";
+
+			} else {
+				$posts .= htmlspecialchars($p['post']);
+				$posts .= "<form action=\"profile.php?username={$username}&postid={$p['id']}\" method=\"post\">
+								<input type=\"submit\" name=\"unlike\" value=\"UnLike\">
+								<span>{$p['likes']} likes</span>
+							</form>";
+				$posts .= "<hr>";
+			}
+
 		}
-		
+
 	} else {
 		die ("User not find");
 	}
